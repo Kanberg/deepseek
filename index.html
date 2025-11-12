@@ -13,33 +13,43 @@
         }
 
         body {
-            background: #1e1e1e;
+            background: linear-gradient(135deg, #1e1e1e, #2d2d30);
             color: #d4d4d4;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
             display: flex;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
         }
 
         .editor-panel {
             flex: 1;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #3e3e3e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            background: #252526;
+            min-width: 0;
         }
 
         .preview-panel {
             flex: 1;
             display: flex;
             flex-direction: column;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             background: #252526;
+            min-width: 0;
         }
 
         .panel-header {
-            padding: 10px 15px;
+            padding: 15px 20px;
             background: #2d2d30;
             border-bottom: 1px solid #3e3e3e;
             display: flex;
@@ -49,31 +59,44 @@
 
         .panel-title {
             font-weight: 600;
-            font-size: 14px;
+            font-size: 16px;
+            color: #cccccc;
         }
 
         .btn {
             background: #0e639c;
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 3px;
+            padding: 8px 16px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 13px;
-            transition: background 0.2s;
+            font-size: 14px;
+            transition: all 0.2s;
+            margin-left: 10px;
         }
 
         .btn:hover {
             background: #1177bb;
+            transform: translateY(-2px);
         }
 
         .btn:active {
             background: #0c5485;
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #5a5a5a;
+        }
+
+        .btn-secondary:hover {
+            background: #6a6a6a;
         }
 
         .editor-container {
             flex: 1;
             position: relative;
+            overflow: hidden;
         }
 
         #code-editor {
@@ -82,20 +105,21 @@
             background: #1e1e1e;
             color: #d4d4d4;
             border: none;
-            padding: 15px;
-            font-family: 'Consolas', monospace;
-            font-size: 14px;
-            line-height: 1.5;
+            padding: 20px 20px 20px 60px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 15px;
+            line-height: 1.6;
             resize: none;
             outline: none;
             tab-size: 4;
+            overflow: auto;
         }
 
         .preview-container {
             flex: 1;
             position: relative;
             overflow: auto;
-            padding: 15px;
+            padding: 0;
         }
 
         #preview-frame {
@@ -106,10 +130,10 @@
         }
 
         .status-bar {
-            padding: 8px 15px;
+            padding: 12px 20px;
             background: #007acc;
             color: white;
-            font-size: 12px;
+            font-size: 13px;
             display: flex;
             justify-content: space-between;
         }
@@ -118,14 +142,15 @@
             height: 200px;
             background: #1e1e1e;
             border-top: 1px solid #3e3e3e;
-            padding: 10px;
+            padding: 15px;
             font-family: 'Consolas', monospace;
-            font-size: 13px;
+            font-size: 14px;
             overflow-y: auto;
         }
 
         .console-output {
             color: #cccccc;
+            white-space: pre-wrap;
         }
 
         .console-error {
@@ -136,10 +161,11 @@
             background: transparent;
             border: 1px solid #3e3e3e;
             color: #cccccc;
-            padding: 4px 8px;
-            border-radius: 3px;
+            padding: 6px 12px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
+            transition: all 0.2s;
         }
 
         .theme-toggle:hover {
@@ -154,13 +180,20 @@
             overflow-y: auto;
             z-index: 100;
             display: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .suggestion-item {
-            padding: 5px 10px;
+            padding: 8px 12px;
             cursor: pointer;
             font-family: 'Consolas', monospace;
-            font-size: 13px;
+            font-size: 14px;
+            border-bottom: 1px solid #3e3e3e;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
         }
 
         .suggestion-item:hover {
@@ -176,12 +209,13 @@
             background: #1e1e1e;
             color: #858585;
             text-align: right;
-            padding: 15px 5px;
+            padding: 20px 5px;
             font-family: 'Consolas', monospace;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 15px;
+            line-height: 1.6;
             border-right: 1px solid #3e3e3e;
             user-select: none;
+            overflow: hidden;
         }
 
         .notification {
@@ -190,23 +224,187 @@
             right: 20px;
             background: #0e639c;
             color: white;
-            padding: 10px 15px;
-            border-radius: 3px;
+            padding: 12px 18px;
+            border-radius: 5px;
             font-size: 14px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             display: none;
             z-index: 1000;
+            transition: opacity 0.3s;
+        }
+
+        .header {
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #007acc, #0e639c);
+            color: white;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .examples {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .example-btn {
+            background: #383838;
+            color: #cccccc;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .example-btn:hover {
+            background: #484848;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #858585;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        /* Стили для светлой темы */
+        body.light-theme {
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            color: #333333;
+        }
+
+        body.light-theme .editor-panel,
+        body.light-theme .preview-panel {
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .panel-header {
+            background: #f0f0f0;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        body.light-theme .panel-title {
+            color: #555555;
+        }
+
+        body.light-theme #code-editor {
+            background: #ffffff;
+            color: #333333;
+        }
+
+        body.light-theme .line-numbers {
+            background: #f5f5f5;
+            color: #666666;
+            border-right: 1px solid #dddddd;
+        }
+
+        body.light-theme .console {
+            background: #f9f9f9;
+            border-top: 1px solid #dddddd;
+        }
+
+        body.light-theme .console-output {
+            color: #333333;
+        }
+
+        body.light-theme .status-bar {
+            background: #0e639c;
+        }
+
+        body.light-theme .theme-toggle {
+            border: 1px solid #dddddd;
+            color: #555555;
+        }
+
+        body.light-theme .theme-toggle:hover {
+            background: #eeeeee;
+        }
+
+        body.light-theme .suggestions {
+            background: #ffffff;
+            border: 1px solid #dddddd;
+        }
+
+        body.light-theme .suggestion-item {
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        body.light-theme .suggestion-item:hover {
+            background: #f5f5f5;
+        }
+
+        body.light-theme .example-btn {
+            background: #e0e0e0;
+            color: #555555;
+        }
+
+        body.light-theme .example-btn:hover {
+            background: #d0d0d0;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .editor-panel, .preview-panel {
+                min-height: 500px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>Супер-редактор Python</h1>
+        <p>Пишите код и сразу видите результат. Поддержка графики, игр и многое другое!</p>
+    </div>
+
+    <div class="examples">
+        <button class="example-btn" data-example="hello">Привет, мир!</button>
+        <button class="example-btn" data-example="graphics">Графика Turtle</button>
+        <button class="example-btn" data-example="game">Простая игра</button>
+        <button class="example-btn" data-example="math">Математика</button>
+        <button class="example-btn" data-example="animation">Анимация</button>
+    </div>
+
     <div class="container">
         <div class="editor-panel">
             <div class="panel-header">
                 <div class="panel-title">РЕДАКТОР PYTHON</div>
                 <div>
                     <button id="run-btn" class="btn">Запуск (Ctrl+Enter)</button>
-                    <button id="clear-btn" class="btn" style="background: #5a5a5a;">Очистить</button>
+                    <button id="clear-btn" class="btn btn-secondary">Очистить</button>
                     <button id="theme-btn" class="theme-toggle">Тёмная тема</button>
                 </div>
             </div>
@@ -242,6 +440,7 @@ turtle.done()</textarea>
                 <div class="panel-title">ПРЕДПРОСМОТР</div>
                 <div>
                     <button id="fullscreen-btn" class="btn">Полный экран</button>
+                    <button id="refresh-btn" class="btn btn-secondary">Обновить</button>
                 </div>
             </div>
             <div class="preview-container">
@@ -249,11 +448,17 @@ turtle.done()</textarea>
             </div>
         </div>
     </div>
+
     <div class="status-bar">
-        <div>Супер-редактор Python | Готов</div>
+        <div>Супер-редактор Python | Готов к работе</div>
         <div id="status-info">Python 3.9 | Pyodide 0.21.3</div>
     </div>
+
     <div class="notification" id="notification">Код выполнен успешно!</div>
+
+    <div class="footer">
+        Супер-редактор Python &copy; 2023 | Создан с использованием HTML, CSS, JavaScript и Pyodide
+    </div>
 
     <script>
         // Элементы DOM
@@ -263,40 +468,196 @@ turtle.done()</textarea>
         const clearBtn = document.getElementById('clear-btn');
         const themeBtn = document.getElementById('theme-btn');
         const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const refreshBtn = document.getElementById('refresh-btn');
         const consoleOutput = document.getElementById('console-output');
         const lineNumbers = document.getElementById('line-numbers');
         const suggestions = document.getElementById('suggestions');
         const notification = document.getElementById('notification');
         const statusInfo = document.getElementById('status-info');
+        const exampleBtns = document.querySelectorAll('.example-btn');
+
+        // Примеры кода
+        const codeExamples = {
+            hello: `# Простой пример Hello World
+print("Привет, мир!")
+
+# Работа с переменными
+name = "Пользователь"
+age = 25
+print(f"Меня зовут {name} и мне {age} лет")
+
+# Список и цикл
+fruits = ["яблоко", "банан", "апельсин"]
+for fruit in fruits:
+    print(f"Фрукт: {fruit}")
+    
+# Функция
+def greet(name):
+    return f"Привет, {name}!"
+
+print(greet("Анна"))`,
+
+            graphics: `# Графика с Turtle
+import turtle
+
+# Настройка экрана
+screen = turtle.Screen()
+screen.bgcolor("lightgreen")
+screen.title("Красивые фигуры")
+
+# Создание черепашки
+t = turtle.Turtle()
+t.speed(0)
+t.width(2)
+
+# Рисование разноцветных кругов
+colors = ["red", "purple", "blue", "green", "orange", "yellow"]
+for i in range(36):
+    t.color(colors[i % 6])
+    t.circle(100)
+    t.right(10)
+
+# Подпись
+t.penup()
+t.goto(0, -200)
+t.color("black")
+t.write("Красивые круги на Python!", align="center", font=("Arial", 16, "bold"))
+
+turtle.done()`,
+
+            game: `# Простая игра "Угадай число"
+import random
+import time
+
+print("=== ИГРА 'УГАДАЙ ЧИСЛО' ===")
+print("Компьютер загадал число от 1 до 100")
+print("Попробуйте угадать его за минимальное количество попыток!")
+
+# Генерация случайного числа
+secret_number = random.randint(1, 100)
+attempts = 0
+
+while True:
+    try:
+        guess = int(input("Введите ваше предположение: "))
+        attempts += 1
+        
+        if guess < secret_number:
+            print("Слишком маленькое число! Попробуйте еще.")
+        elif guess > secret_number:
+            print("Слишком большое число! Попробуйте еще.")
+        else:
+            print(f"Поздравляем! Вы угадали число {secret_number} за {attempts} попыток!")
+            break
+    except ValueError:
+        print("Пожалуйста, введите целое число!")
+
+print("Спасибо за игру!")`,
+
+            math: `# Математические вычисления
+import math
+
+print("=== МАТЕМАТИЧЕСКИЕ ВЫЧИСЛЕНИЯ ===\\n")
+
+# Основные операции
+a = 15
+b = 7
+print(f"{a} + {b} = {a + b}")
+print(f"{a} - {b} = {a - b}")
+print(f"{a} * {b} = {a * b}")
+print(f"{a} / {b} = {a / b:.2f}")
+print(f"{a} // {b} = {a // b} (целочисленное деление)")
+print(f"{a} % {b} = {a % b} (остаток от деления)\\n")
+
+# Степени и корни
+print(f"{a} в квадрате = {a**2}")
+print(f"Квадратный корень из {a} = {math.sqrt(a):.2f}")
+print(f"{2} в степени {10} = {2**10}\\n")
+
+# Тригонометрия
+angle = 45
+radians = math.radians(angle)
+print(f"Синус {angle}° = {math.sin(radians):.2f}")
+print(f"Косинус {angle}° = {math.cos(radians):.2f}")
+print(f"Тангенс {angle}° = {math.tan(radians):.2f}\\n")
+
+# Константы
+print(f"Число π = {math.pi:.5f}")
+print(f"Число e = {math.e:.5f}")`,
+
+            animation: `# Анимация с Turtle
+import turtle
+import time
+
+# Настройка экрана
+screen = turtle.Screen()
+screen.bgcolor("black")
+screen.title("Анимированные фигуры")
+screen.tracer(0)  # Отключаем автоматическое обновление
+
+# Создание нескольких черепашек
+turtles = []
+colors = ["red", "green", "blue", "yellow", "purple", "orange"]
+
+for i in range(6):
+    t = turtle.Turtle()
+    t.shape("turtle")
+    t.color(colors[i])
+    t.speed(0)
+    t.penup()
+    t.goto(0, -150)
+    turtles.append(t)
+
+# Анимация
+angle = 0
+while angle < 360:
+    for i, t in enumerate(turtles):
+        # Вычисляем позицию для каждой черепашки
+        x = 200 * math.cos(math.radians(angle + i * 60))
+        y = 200 * math.sin(math.radians(angle + i * 60))
+        t.goto(x, y)
+        t.setheading(angle * 2 + i * 60)
+    
+    screen.update()  # Обновляем экран
+    angle += 1
+    time.sleep(0.02)
+
+print("Анимация завершена!")`
+        };
 
         // Инициализация Pyodide (интерпретатор Python в браузере)
         let pyodide;
         async function initializePyodide() {
             statusInfo.textContent = "Загрузка Pyodide...";
             
-            // Загружаем Pyodide
-            pyodide = await loadPyodide({
-                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.21.3/full/"
-            });
-            
-            // Устанавливаем стандартный вывод в нашу консоль
-            pyodide.runPython(`
-                import sys
-                from js import consoleOutput
+            try {
+                // Загружаем Pyodide
+                pyodide = await loadPyodide({
+                    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.21.3/full/"
+                });
                 
-                class OutputCatcher:
-                    def write(self, text):
-                        consoleOutput.innerHTML += text
+                // Устанавливаем стандартный вывод в нашу консоль
+                pyodide.runPython(`
+                    import sys
+                    from js import consoleOutput
                     
-                    def flush(self):
-                        pass
+                    class OutputCatcher:
+                        def write(self, text):
+                            consoleOutput.innerHTML += text
+                        
+                        def flush(self):
+                            pass
+                    
+                    sys.stdout = OutputCatcher()
+                    sys.stderr = OutputCatcher()
+                `);
                 
-                sys.stdout = OutputCatcher()
-                sys.stderr = OutputCatcher()
-            `);
-            
-            statusInfo.textContent = "Python 3.9 | Pyodide 0.21.3 | Готов";
-            showNotification("Pyodide загружен и готов к работе!");
+                statusInfo.textContent = "Python 3.9 | Pyodide 0.21.3 | Готов";
+                showNotification("Pyodide загружен и готов к работе!");
+            } catch (error) {
+                statusInfo.textContent = "Ошибка загрузки Pyodide";
+                showNotification("Ошибка при загрузке Pyodide: " + error.message, true);
+            }
         }
 
         // Показ уведомления
@@ -346,200 +707,4 @@ turtle.done()</textarea>
         // Запуск кода Python
         async function runCode() {
             if (!pyodide) {
-                showNotification("Pyodide еще загружается...", true);
-                return;
-            }
-            
-            const code = codeEditor.value;
-            consoleOutput.innerHTML = '';
-            statusInfo.textContent = "Выполнение...";
-            
-            try {
-                // Очищаем предыдущий вывод turtle, если он есть
-                const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-                previewDoc.open();
-                previewDoc.write(`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>Python Preview</title>
-                        <style>
-                            body { margin: 0; padding: 20px; background: white; font-family: Arial, sans-serif; }
-                            canvas { border: 1px solid #ccc; }
-                        </style>
-                    </head>
-                    <body>
-                        <div id="output"></div>
-                    </body>
-                    </html>
-                `);
-                previewDoc.close();
-                
-                // Выполняем код Python
-                await pyodide.runPythonAsync(code);
-                statusInfo.textContent = "Python 3.9 | Pyodide 0.21.3 | Выполнено";
-                showNotification("Код выполнен успешно!");
-            } catch (error) {
-                consoleOutput.innerHTML += `<div class="console-error">Ошибка: ${error.message}</div>`;
-                statusInfo.textContent = "Python 3.9 | Pyodide 0.21.3 | Ошибка";
-                showNotification("Произошла ошибка выполнения!", true);
-            }
-        }
-
-        // Очистка редактора и вывода
-        function clearAll() {
-            if (confirm("Очистить редактор и вывод?")) {
-                codeEditor.value = '';
-                consoleOutput.innerHTML = '';
-                updateLineNumbers();
-                
-                const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-                previewDoc.open();
-                previewDoc.write('<html><body style="background:white;"></body></html>');
-                previewDoc.close();
-                
-                showNotification("Редактор и вывод очищены");
-            }
-        }
-
-        // Переключение темы
-        function toggleTheme() {
-            const isDark = document.body.style.backgroundColor === 'rgb(255, 255, 255)';
-            
-            if (isDark) {
-                // Переключаем на темную тему
-                document.body.style.backgroundColor = '#1e1e1e';
-                document.body.style.color = '#d4d4d4';
-                codeEditor.style.backgroundColor = '#1e1e1e';
-                codeEditor.style.color = '#d4d4d4';
-                lineNumbers.style.backgroundColor = '#1e1e1e';
-                lineNumbers.style.color = '#858585';
-                themeBtn.textContent = 'Тёмная тема';
-            } else {
-                // Переключаем на светлую тему
-                document.body.style.backgroundColor = '#ffffff';
-                document.body.style.color = '#333333';
-                codeEditor.style.backgroundColor = '#ffffff';
-                codeEditor.style.color = '#333333';
-                lineNumbers.style.backgroundColor = '#f5f5f5';
-                lineNumbers.style.color = '#666666';
-                themeBtn.textContent = 'Светлая тема';
-            }
-        }
-
-        // Полноэкранный режим для предпросмотра
-        function toggleFullscreen() {
-            const previewContainer = document.querySelector('.preview-container');
-            
-            if (!document.fullscreenElement) {
-                if (previewContainer.requestFullscreen) {
-                    previewContainer.requestFullscreen();
-                } else if (previewContainer.webkitRequestFullscreen) {
-                    previewContainer.webkitRequestFullscreen();
-                } else if (previewContainer.msRequestFullscreen) {
-                    previewContainer.msRequestFullscreen();
-                }
-                fullscreenBtn.textContent = 'Выйти из полного экрана';
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-                fullscreenBtn.textContent = 'Полный экран';
-            }
-        }
-
-        // Простые подсказки для кода
-        const pythonKeywords = [
-            'print', 'def', 'class', 'if', 'else', 'elif', 'for', 'while', 
-            'import', 'from', 'as', 'return', 'try', 'except', 'with', 
-            'True', 'False', 'None', 'and', 'or', 'not', 'in', 'is'
-        ];
-
-        function showSuggestions() {
-            const cursorPos = codeEditor.selectionStart;
-            const textBeforeCursor = codeEditor.value.substring(0, cursorPos);
-            const currentLine = textBeforeCursor.split('\n').pop();
-            
-            // Простая логика для показа подсказок
-            const wordMatch = currentLine.match(/\b(\w+)$/);
-            if (wordMatch) {
-                const currentWord = wordMatch[1];
-                const matches = pythonKeywords.filter(keyword => 
-                    keyword.startsWith(currentWord)
-                );
-                
-                if (matches.length > 0) {
-                    suggestions.innerHTML = '';
-                    matches.forEach(match => {
-                        const item = document.createElement('div');
-                        item.className = 'suggestion-item';
-                        item.textContent = match;
-                        item.addEventListener('click', () => {
-                            const before = textBeforeCursor.substring(0, textBeforeCursor.length - currentWord.length);
-                            const after = codeEditor.value.substring(cursorPos);
-                            codeEditor.value = before + match + after;
-                            codeEditor.focus();
-                            codeEditor.selectionStart = codeEditor.selectionEnd = before.length + match.length;
-                            suggestions.style.display = 'none';
-                        });
-                        suggestions.appendChild(item);
-                    });
-                    
-                    const rect = codeEditor.getBoundingClientRect();
-                    const lineHeight = parseInt(getComputedStyle(codeEditor).lineHeight);
-                    const lineIndex = (codeEditor.value.substring(0, cursorPos).match(/\n/g) || []).length;
-                    const top = rect.top + (lineIndex * lineHeight) - codeEditor.scrollTop + 30;
-                    
-                    suggestions.style.top = top + 'px';
-                    suggestions.style.left = (rect.left + 50) + 'px';
-                    suggestions.style.display = 'block';
-                    return;
-                }
-            }
-            
-            suggestions.style.display = 'none';
-        }
-
-        // Инициализация редактора
-        function initializeEditor() {
-            updateLineNumbers();
-            
-            // Обработчики событий
-            codeEditor.addEventListener('input', updateLineNumbers);
-            codeEditor.addEventListener('input', showSuggestions);
-            codeEditor.addEventListener('click', () => suggestions.style.display = 'none');
-            
-            runBtn.addEventListener('click', runCode);
-            clearBtn.addEventListener('click', clearAll);
-            themeBtn.addEventListener('click', toggleTheme);
-            fullscreenBtn.addEventListener('click', toggleFullscreen);
-            
-            // Инициализация Pyodide
-            initializePyodide();
-            
-            // Автозапуск кода при изменении (опционально, можно закомментировать)
-            // codeEditor.addEventListener('input', debounce(runCode, 1000));
-        }
-
-        // Вспомогательная функция для задержки
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Запуск инициализации при загрузке страницы
-        document.addEventListener('DOMContentLoaded', initializeEditor);
-    </script>
-</body>
-</html>g
+                showNotification("Pyodide еще загружается.
