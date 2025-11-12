@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Супер-редактор Python</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #3e3e3e;
+        }
+
+        .preview-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #252526;
+        }
+
+        .panel-header {
+            padding: 10px 15px;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e3e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #1177bb;
+        }
+
+        .btn:active {
+            background: #0c5485;
+        }
+
+        .editor-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #code-editor {
+            width: 100%;
+            height: 100%;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+            padding: 15px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            tab-size: 4;
+        }
+
+        .preview-container {
+            flex: 1;
+            position: relative;
+            overflow: auto;
+            padding: 15px;
+        }
+
+        #preview-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        .status-bar {
+            padding: 8px 15px;
+            background: #007acc;
+            color: white;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .console {
+            height: 200px;
+            background: #1e1e1e;
+            border-top: 1px solid #3e3e3e;
+            padding: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            overflow-y: auto;
+        }
+
+        .console-output {
+            color: #cccccc;
+        }
+
+        .console-error {
+            color: #f48771;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid #3e3e3e;
+            color: #cccccc;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .theme-toggle:hover {
+            background: #3e3e3e;
+        }
+
+        .suggestions {
+            position: absolute;
+            background: #252526;
+            border: 1px solid #3e3e3e;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+        }
+
+        .suggestion-item:hover {
+            background: #2a2d2e;
+        }
+
+        .line-numbers {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 100%;
+            background: #1e1e1e;
+            color: #858585;
+            text-align: right;
+            padding: 15px 5px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            border-right: 1px solid #3e3e3e;
+            user-select: none;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0e639c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 3px;
+            font-size: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="editor-panel">
+            <div class="panel-header">
+                <div class="panel-title">РЕДАКТОР PYTHON</div>
+                <div>
+                    <button id="run-btn" class="btn">Запуск (Ctrl+Enter)</button>
+                    <button id="clear-btn" class="btn" style="background: #5a5a5a;">Очистить</button>
+                    <button id="theme-btn" class="theme-toggle">Тёмная тема</button>
+                </div>
+            </div>
+            <div class="editor-container">
+                <div class="line-numbers" id="line-numbers">1</div>
+                <textarea id="code-editor" spellcheck="false" placeholder="Введите код Python здесь..."># Добро пожаловать в супер-редактор Python!
+# Напишите свой код и нажмите "Запуск" или Ctrl+Enter
+
+# Простой пример
+print("Привет, мир!")
+
+# Графика с помощью Turtle
+import turtle
+
+t = turtle.Turtle()
+t.speed(0)
+t.color("blue")
+
+for i in range(36):
+    t.circle(100)
+    t.right(10)
+
+turtle.done()</textarea>
+                <div class="suggestions" id="suggestions"></div>
+            </div>
+            <div class="console">
+                <div class="panel-title" style="margin-bottom: 10px;">КОНСОЛЬ ВЫВОДА</div>
+                <div id="console-output" class="console-output"></div>
+            </div>
+        </div>
+        <div class="preview-panel">
+            <div class="panel-header">
+                <div class="panel-title">ПРЕДПРОСМОТР</div>
+                <div>
+                    <button id="fullscreen-btn" class="btn">Полный экран</button>
+                </div>
+            </div>
+            <div class="preview-container">
+                <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar">
+        <div>Супер-редактор Python | Готов</div>
+        <div id="status-info">Python 3.9 | Pyodide 0.21.3</div>
+    </div>
+    <div class="notification" id="notification">Код выполнен успешно!</div>
+
+    <script>
+        // Элементы DOM
+        const codeEditor = document.getElementById('code-editor');
+        const previewFrame = document.getElementById('preview-frame');
+        const runBtn = document.getElementById('run-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const themeBtn = document.getElementById('theme-btn');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const consoleOutput = document.getElementById('console-output');
+        const lineNumbers = document.getElementById('line-numbers');
+        const suggestions = document.getElementById('suggestions');
+        const notification = document.getElementById('notification');
+        const statusInfo = document.getElementById('status-info');
+
+        // Инициализация Pyodide (интерпретатор Python в браузере)
+        let pyodide;
+        async function initializePyodide() {
+            statusInfo.textContent = "Загрузка Pyodide...";
+            
+            // Загружаем Pyodide
+            pyodide = await loadPyodide({
+                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.21.3/full/"
+            });
+            
+            // Устанавливаем стандартный вывод в нашу консоль
+            pyodide.runPython(`
+                import sys
+                from js import consoleOutput
+                
+                class OutputCatcher:
+                    def write(self, text):
+                        consoleOutput.innerHTML += text
+                    
+                    def flush(self):
+                        pass
+                
+                sys.stdout = OutputCatcher()
+                sys.stderr = OutputCatcher()
+            `);
+            
+            statusInfo.textContent = "Python 3.9 | Pyodide 0.21.3 | Готов";
+            showNotification("Pyodide загружен и готов к работе!");
+        }
+
+        // Показ уведомления
+        function showNotification(message, isError = false) {
+            notification.textContent = message;
+            notification.style.display = 'block';
+            notification.style.background = isError ? '#c42b1c' : '#0e639c';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Обновление нумерации строк
+        function updateLineNumbers() {
+            const lines = codeEditor.value.split('\n').length;
+            let numbers = '';
+            for (let i = 1; i <= lines; i++) {
+                numbers += i + '\n';
+            }
+            lineNumbers.textContent = numbers;
+        }
+
+        // Прокрутка нумерации строк вместе с редактором
+        codeEditor.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = codeEditor.scrollTop;
+        });
+
+        // Обработка табуляции в редакторе
+        codeEditor.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = codeEditor.selectionStart;
+                const end = codeEditor.selectionEnd;
+                
+                // Вставляем 4 пробела вместо табуляции
+                codeEditor.value = codeEditor.value.substring(0, start) + '    ' + codeEditor.value.substring(end);
+                codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
+            }
+            
+            // Автозапуск при нажатии Ctrl+Enter
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                runCode();
+            }
+        });
+
+        // Запуск кода Python
+        async function runCode() {
+            if (!pyodide) {
+                showNotification("Pyodide еще загружается...", true);
+                return;
+            }
+            
+            const code = codeEditor.value;
+            consoleOutput.innerHTML = '';
+            statusInfo.textContent = "Выполнение...";
+            
+            try {
+                // Очищаем предыдущий вывод turtle, если он есть
+                const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                previewDoc.open();
+                previewDoc.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Python Preview</title>
+                        <style>
+                            body { margin: 0; padding: 20px; background: white; font-family: Arial, sans-serif; }
+                            canvas { border: 1px solid #ccc; }
+                        </style>
+                    </head>
+                    <body>
+                        <div id="output"></div>
+                    </body>
+                    </html>
+                `);
+                previewDoc.close();
+                
+                // Выполняем код Python
+                await pyodide.runPythonAsync(code);
+                statusInfo.textContent = "Python 3.9 | Pyodide 0.21.3 | Выполнено";
+                showNotification("Код выполнен успешно!");
+            } catch (error) {
+                consoleOutput.innerHTML += `<div class="console-error">Ошибка: ${error.message}</div>`;
+                statusInfo.textContent = "Python 3.9 | Pyodide 0.21.3 | Ошибка";
+                showNotification("Произошла ошибка выполнения!", true);
+            }
+        }
+
+        // Очистка редактора и вывода
+        function clearAll() {
+            if (confirm("Очистить редактор и вывод?")) {
+                codeEditor.value = '';
+                consoleOutput.innerHTML = '';
+                updateLineNumbers();
+                
+                const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                previewDoc.open();
+                previewDoc.write('<html><body style="background:white;"></body></html>');
+                previewDoc.close();
+                
+                showNotification("Редактор и вывод очищены");
+            }
+        }
+
+        // Переключение темы
+        function toggleTheme() {
+            const isDark = document.body.style.backgroundColor === 'rgb(255, 255, 255)';
+            
+            if (isDark) {
+                // Переключаем на темную тему
+                document.body.style.backgroundColor = '#1e1e1e';
+                document.body.style.color = '#d4d4d4';
+                codeEditor.style.backgroundColor = '#1e1e1e';
+                codeEditor.style.color = '#d4d4d4';
+                lineNumbers.style.backgroundColor = '#1e1e1e';
+                lineNumbers.style.color = '#858585';
+                themeBtn.textContent = 'Тёмная тема';
+            } else {
+                // Переключаем на светлую тему
+                document.body.style.backgroundColor = '#ffffff';
+                document.body.style.color = '#333333';
+                codeEditor.style.backgroundColor = '#ffffff';
+                codeEditor.style.color = '#333333';
+                lineNumbers.style.backgroundColor = '#f5f5f5';
+                lineNumbers.style.color = '#666666';
+                themeBtn.textContent = 'Светлая тема';
+            }
+        }
+
+        // Полноэкранный режим для предпросмотра
+        function toggleFullscreen() {
+            const previewContainer = document.querySelector('.preview-container');
+            
+            if (!document.fullscreenElement) {
+                if (previewContainer.requestFullscreen) {
+                    previewContainer.requestFullscreen();
+                } else if (previewContainer.webkitRequestFullscreen) {
+                    previewContainer.webkitRequestFullscreen();
+                } else if (previewContainer.msRequestFullscreen) {
+                    previewContainer.msRequestFullscreen();
+                }
+                fullscreenBtn.textContent = 'Выйти из полного экрана';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                fullscreenBtn.textContent = 'Полный экран';
+            }
+        }
+
+        // Простые подсказки для кода
+        const pythonKeywords = [
+            'print', 'def', 'class', 'if', 'else', 'elif', 'for', 'while', 
+            'import', 'from', 'as', 'return', 'try', 'except', 'with', 
+            'True', 'False', 'None', 'and', 'or', 'not', 'in', 'is'
+        ];
+
+        function showSuggestions() {
+            const cursorPos = codeEditor.selectionStart;
+            const textBeforeCursor = codeEditor.value.substring(0, cursorPos);
+            const currentLine = textBeforeCursor.split('\n').pop();
+            
+            // Простая логика для показа подсказок
+            const wordMatch = currentLine.match(/\b(\w+)$/);
+            if (wordMatch) {
+                const currentWord = wordMatch[1];
+                const matches = pythonKeywords.filter(keyword => 
+                    keyword.startsWith(currentWord)
+                );
+                
+                if (matches.length > 0) {
+                    suggestions.innerHTML = '';
+                    matches.forEach(match => {
+                        const item = document.createElement('div');
+                        item.className = 'suggestion-item';
+                        item.textContent = match;
+                        item.addEventListener('click', () => {
+                            const before = textBeforeCursor.substring(0, textBeforeCursor.length - currentWord.length);
+                            const after = codeEditor.value.substring(cursorPos);
+                            codeEditor.value = before + match + after;
+                            codeEditor.focus();
+                            codeEditor.selectionStart = codeEditor.selectionEnd = before.length + match.length;
+                            suggestions.style.display = 'none';
+                        });
+                        suggestions.appendChild(item);
+                    });
+                    
+                    const rect = codeEditor.getBoundingClientRect();
+                    const lineHeight = parseInt(getComputedStyle(codeEditor).lineHeight);
+                    const lineIndex = (codeEditor.value.substring(0, cursorPos).match(/\n/g) || []).length;
+                    const top = rect.top + (lineIndex * lineHeight) - codeEditor.scrollTop + 30;
+                    
+                    suggestions.style.top = top + 'px';
+                    suggestions.style.left = (rect.left + 50) + 'px';
+                    suggestions.style.display = 'block';
+                    return;
+                }
+            }
+            
+            suggestions.style.display = 'none';
+        }
+
+        // Инициализация редактора
+        function initializeEditor() {
+            updateLineNumbers();
+            
+            // Обработчики событий
+            codeEditor.addEventListener('input', updateLineNumbers);
+            codeEditor.addEventListener('input', showSuggestions);
+            codeEditor.addEventListener('click', () => suggestions.style.display = 'none');
+            
+            runBtn.addEventListener('click', runCode);
+            clearBtn.addEventListener('click', clearAll);
+            themeBtn.addEventListener('click', toggleTheme);
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+            
+            // Инициализация Pyodide
+            initializePyodide();
+            
+            // Автозапуск кода при изменении (опционально, можно закомментировать)
+            // codeEditor.addEventListener('input', debounce(runCode, 1000));
+        }
+
+        // Вспомогательная функция для задержки
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Запуск инициализации при загрузке страницы
+        document.addEventListener('DOMContentLoaded', initializeEditor);
+    </script>
+</body>
+</html>g
